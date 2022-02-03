@@ -38,12 +38,16 @@ int StringToTritonDataType(String dtype) {
         case "BOOL":
         return TRITONSERVER_TYPE_BOOL;
         case "UINT8":
+        System.out.println("Warning: Unsupported type" + dtype);
         return TRITONSERVER_TYPE_UINT8;
         case "UINT16":
+        System.out.println("Warning: Unsupported type" + dtype);
         return TRITONSERVER_TYPE_UINT16;
         case "UINT32":
+        System.out.println("Warning: Unsupported type" + dtype);
         return TRITONSERVER_TYPE_UINT32;
         case "UINT64":
+        System.out.println("Warning: Unsupported type" + dtype);
         return TRITONSERVER_TYPE_UINT64;
         case "INT8":
         return TRITONSERVER_TYPE_INT8;
@@ -61,6 +65,9 @@ int StringToTritonDataType(String dtype) {
         return TRITONSERVER_TYPE_FP64;
         case "STRING":
         return TRITONSERVER_TYPE_BYTES;
+        default:
+        System.out.println("Unrecognoized type" + dtype);
+        return TRITONSERVER_TYPE_INVALID;
     }
 }
 
@@ -92,8 +99,8 @@ GenerateInputData(
 }
 static void
 GenerateInputData(
-    LongPointer[] input_data, int length) {
-  input_data[0] = new LongPointer(length);
+  CLongPointer[] input_data, int length) {
+  input_data[0] = new CLongPointer(length);
   for (int i = 0; i < length; ++i) {
     input_data[0].put(i, i);
   }
@@ -125,4 +132,373 @@ GenerateInputData(
   }
 }
 
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, BytePointer output0,
+    BytePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    ShortPointer input0, ShortPointer input1, ShortPointer output0,
+    ShortPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, IntPointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    CLongPointer input0, CLongPointer input1, CLongPointer output0,
+    CLongPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    FloatPointer input0, FloatPointer input1, FloatPointer output0,
+    FloatPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    DoublePointer input0, DoublePointer input1, DoublePointer output0,
+    DoublePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    FloatPointer input0, FloatPointer input1, DoublePointer output0,
+    DoublePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, IntPointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, BytePointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, BytePointer output0,
+    ShortPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, FloatPointer output0,
+    FloatPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    FloatPointer input0, FloatPointer input1, IntPointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, FloatPointer output0,
+    ShortPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, BytePointer output0,
+    BytePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, IntPointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, IntPointer output0,
+    BytePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    BytePointer input0, BytePointer input1, BytePointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, BytePointer output0,
+    BytePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, IntPointer output0,
+    BytePointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
+
+static void
+CompareResult(
+    String output0_name, String output1_name,
+    IntPointer input0, IntPointer input1, BytePointer output0,
+    IntPointer output1, int length)
+{
+  for (int i = 0; i < length; ++i) {
+    System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                     + output0.get(i));
+    System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                     + output1.get(i));
+
+    if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+      FAIL("incorrect sum in " + output0_name);
+    }
+    if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+      FAIL("incorrect difference in " + output1_name);
+    }
+  }
+}
 };

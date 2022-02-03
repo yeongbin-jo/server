@@ -201,67 +201,6 @@ public class Simple {
     }
 
     static void
-    GenerateInputData(
-        IntPointer[] input0_data, IntPointer[] input1_data)
-    {
-      input0_data[0] = new IntPointer(16);
-      input1_data[0] = new IntPointer(16);
-      for (int i = 0; i < 16; ++i) {
-        input0_data[0].put(i, i);
-        input1_data[0].put(i, 1);
-      }
-    }
-
-    static void
-    GenerateInputData(
-        FloatPointer[] input0_data, FloatPointer[] input1_data)
-    {
-      input0_data[0] = new FloatPointer(16);
-      input1_data[0] = new FloatPointer(16);
-      for (int i = 0; i < 16; ++i) {
-        input0_data[0].put(i, i);
-        input1_data[0].put(i, 1);
-      }
-    }
-
-    static void
-    CompareResult(
-        String output0_name, String output1_name,
-        IntPointer input0, IntPointer input1, IntPointer output0,
-        IntPointer output1)
-    {
-      for (int i = 0; i < 16; ++i) {
-        if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
-          FAIL("incorrect sum in " + output0_name);
-        }
-        if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
-          FAIL("incorrect difference in " + output1_name);
-        }
-      }
-    }
-
-    static void
-    CompareResult(
-        String output0_name, String output1_name,
-        FloatPointer input0, FloatPointer input1, FloatPointer output0,
-        FloatPointer output1)
-    {
-      for (int i = 0; i < 16; ++i) {
-        System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
-                         + output0.get(i));
-        System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
-                         + output1.get(i));
-
-        if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
-          FAIL("incorrect sum in " + output0_name);
-        }
-        if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
-          FAIL("incorrect difference in " + output1_name);
-        }
-      }
-    }
-
-    static void
     Check(
         TRITONSERVER_InferenceResponse response,
         Pointer input0_data, Pointer input1_data,
