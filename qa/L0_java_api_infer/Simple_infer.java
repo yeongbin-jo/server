@@ -1,4 +1,4 @@
-// Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2022, NVIDIA CORPORATION & AFFLIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -103,7 +103,6 @@ public class Simple {
                                + " for result tensor " + tensor_name);
             }
           }
-
           return null;  // Success
         }
     }
@@ -164,13 +163,7 @@ public class Simple {
       String seen_data_type = null;
       for (JsonElement input_element : model_metadata.get("inputs").getAsJsonArray()) {
         JsonObject input = input_element.getAsJsonObject();
-        if (!input.get("datatype").getAsString().equals("INT32") &&
-            !input.get("datatype").getAsString().equals("FP32")) {
-          return TRITONSERVER_ErrorNew(
-              TRITONSERVER_ERROR_UNSUPPORTED,
-              "simple lib example only supports model with data type INT32 or " +
-              "FP32");
-        }
+
         if (seen_data_type == null) {
           seen_data_type = input.get("datatype").getAsString();
         } else if (!seen_data_type.equals(input.get("datatype").getAsString())) {
@@ -181,13 +174,7 @@ public class Simple {
       }
       for (JsonElement output_element : model_metadata.get("outputs").getAsJsonArray()) {
         JsonObject output = output_element.getAsJsonObject();
-        if (!output.get("datatype").getAsString().equals("INT32") &&
-            !output.get("datatype").getAsString().equals("FP32")) {
-          return TRITONSERVER_ErrorNew(
-              TRITONSERVER_ERROR_UNSUPPORTED,
-              "simple lib example only supports model with data type INT32 or " +
-              "FP32");
-        } else if (!seen_data_type.equals(output.get("datatype").getAsString())) {
+        if (!seen_data_type.equals(output.get("datatype").getAsString())) {
           return TRITONSERVER_ErrorNew(
               TRITONSERVER_ERROR_INVALID_ARG,
               "the inputs and outputs of 'simple' model must have the data type");
