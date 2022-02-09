@@ -49,7 +49,7 @@ source ../common/util.sh
 
 # If the test should be run in long and high load setting
 if [ "$TRITON_PERF_LONG" == 1 ]; then
-    TEST_DURATION=60
+    TEST_DURATION=172800
     # ~ 4 days
     # TEST_DURATION=345600
     LOAD_THREAD_COUNT=2
