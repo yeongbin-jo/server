@@ -2555,8 +2555,8 @@ HTTPAPIServer::OKReplyCallback(evthr_t* thr, void* arg, void* shared)
 
 #ifdef TRITON_ENABLE_TRACING
   if (infer_request->trace_ != nullptr) {
-    infer_request->trace_->CaptureTimestamp(
-        "HTTP_SEND_START", request->send_start_ns);
+    //infer_request->trace_->CaptureTimestamp(
+    //   "HTTP_SEND_START", request->send_start_ns);
     infer_request->trace_->CaptureTimestamp(
         "HTTP_SEND_END", request->send_end_ns);
   }
@@ -2630,6 +2630,8 @@ HTTPAPIServer::InferRequestClass::InferResponseComplete(
 
   HTTPAPIServer::InferRequestClass* infer_request =
       reinterpret_cast<HTTPAPIServer::InferRequestClass*>(userp);
+
+  infer_request->trace_->CaptureTimestamp("HTTP_SEND_START", TraceManager::CaptureTimestamp());
 
   auto response_count = infer_request->IncrementResponseCount();
 

@@ -77,7 +77,7 @@ def verify_timestamps(traces, preserve):
         # want to use its responses as baseline
         if trace["id"] <= (
                 8 + grpc_id_offset) and compute_span >= 400 * 1000 * 1000:
-            send_end = timestamps["HTTP_SEND_END"]
+            send_end = timestamps["HTTP_SEND_START"]
             large_delay_send_end = max(large_delay_send_end, send_end)
         else:
             small_delay_traces.append(trace)
@@ -87,7 +87,7 @@ def verify_timestamps(traces, preserve):
         timestamps = dict()
         for ts in trace["timestamps"]:
             timestamps[ts["name"]] = ts["ns"]
-        send_end = timestamps["HTTP_SEND_END"]
+        send_end = timestamps["HTTP_SEND_START"]
         if send_end > large_delay_send_end:
             response_request_after_large_delay_count += 1
 
